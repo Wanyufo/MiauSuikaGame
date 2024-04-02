@@ -54,9 +54,9 @@ public class CatManager : MonoBehaviour
             throw new Exception("The highScoreText is not set. Please set it in the inspector.");
         }
 
-        CreateNextCat();
+        CreateNextCat(0);
         MoveNextCatToDropPaw();
-        CreateNextCat();
+        CreateNextCat(1);
     }
 
     private bool _onCooldown = false;
@@ -72,9 +72,10 @@ public class CatManager : MonoBehaviour
         DropCat();
     }
 
-    private void CreateNextCat()
+    private void CreateNextCat(int index = -1)
     {
-        _nextCat = Instantiate(GetRandomDropCat(), nextCatPose).GetComponent<Cat>();
+        GameObject cat = index == -1 ? GetRandomDropCat() : cats[index].gameObject;
+        _nextCat = Instantiate(cat, nextCatPose).GetComponent<Cat>();
         Rigidbody2D rigi = _nextCat.GetComponent<Rigidbody2D>();
         rigi.simulated = false;
     }
@@ -95,7 +96,7 @@ public class CatManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Mouse0))
         {
             // if space is pressed, instantiate a cat at the mouse position
             _thisCat.transform.SetParent(this.transform, true);
@@ -103,11 +104,15 @@ public class CatManager : MonoBehaviour
             rigi.simulated = true;
             rigi.AddForce(Vector2.down * (startingDownForce * rigi.mass), ForceMode2D.Impulse);
             _onCooldown = true;
+
+            int index = cats.FindIndex(cat => cat.CatType == _thisCat.CatType);
+            AddPointsToHighScoreByIndex(index);
             Invoke(nameof(ResetCooldown), delayBetweenDrops);
             MoveNextCatToDropPaw();
             CreateNextCat();
         }
     }
+
 
     private void SetDropPawPose()
     {
