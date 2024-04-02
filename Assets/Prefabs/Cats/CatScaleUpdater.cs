@@ -36,12 +36,23 @@ namespace Prefabs.Cats
                 double scale = scaleOfSmallestCat * Math.Pow(scaleFactor, i) + additiveScale * i;
                 Debug.Log("Cat " + catNr + " scale: " + scale);
                 catPrefabs[i].transform.localScale = new Vector3((float) scale, (float) scale, (float) scale);
-
+                SetMass(catPrefabs[i], scale);
                 instantiatedCats.Add(Instantiate(catPrefabs[i],
                     new Vector3((float) (i * (scale / 2)), this.transform.position.y, 0),
                     Quaternion.identity));
+                
             }
         }
+
+
+        private void SetMass(GameObject cat, double scale)
+        {
+            // Calculate the mass of the cat based on its scale
+            Rigidbody2D rigi = cat.GetComponent<Rigidbody2D>();
+            rigi.useAutoMass = false;
+            rigi.mass = (float) (scale * 3);
+        }
+        
 
         private void OnValidate()
         {

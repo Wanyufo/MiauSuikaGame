@@ -13,7 +13,18 @@ public class CatManager : MonoBehaviour
     private List<Cat> cats;
 
     [SerializeField] private TMP_Text highScoreText;
-    [SerializeField, Range(1,100)] private float startingDownForce = 10f;
+    [SerializeField] private float startingDownForce = 10f;
+
+    [SerializeField] private float delayBetweenDrops = 0.5f;
+
+    [SerializeField] private Transform nextCatPose;
+    [SerializeField] private Transform dropPawPose;
+
+    [SerializeField] private float dropAreaWidth;
+
+    private Cat _thisCat;
+    private Cat _nextCat;
+
 
     private int _dropCatCount = 4;
 
@@ -42,6 +53,10 @@ public class CatManager : MonoBehaviour
         {
             throw new Exception("The highScoreText is not set. Please set it in the inspector.");
         }
+
+        CreateNextCat();
+        MoveNextCatToDropPaw();
+        CreateNextCat();
     }
 
     private bool _onCooldown = false;
@@ -53,8 +68,25 @@ public class CatManager : MonoBehaviour
 
     private void Update()
     {
+        SetDropPawPose();
         DropCat();
     }
+
+    private void CreateNextCat()
+    {
+        _nextCat = Instantiate(GetRandomDropCat(), nextCatPose).GetComponent<Cat>();
+        Rigidbody2D rigi = _nextCat.GetComponent<Rigidbody2D>();
+        rigi.simulated = false;
+    }
+
+    private void MoveNextCatToDropPaw()
+    {
+        _nextCat.transform.position = dropPawPose.position;
+        _nextCat.transform.SetParent(dropPawPose);
+        _thisCat = _nextCat;
+        _nextCat = null;
+    }
+
 
     public void DropCat()
     {
@@ -65,18 +97,34 @@ public class CatManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // check mouse position
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 0;
-            mousePosition.y = 0;
             // if space is pressed, instantiate a cat at the mouse position
-
-            GameObject cat = GetRandomDropCat();
-            Rigidbody2D rigi = Instantiate(cat, mousePosition, Quaternion.identity).GetComponent<Rigidbody2D>();
-            rigi.AddForce(Vector2.down * startingDownForce, ForceMode2D.Impulse);
+            _thisCat.transform.SetParent(this.transform, true);
+            Rigidbody2D rigi = _thisCat.GetComponent<Rigidbody2D>();
+            rigi.simulated = true;
+            rigi.AddForce(Vector2.down * (startingDownForce * rigi.mass), ForceMode2D.Impulse);
             _onCooldown = true;
-            Invoke(nameof(ResetCooldown), 0.5f);
+            Invoke(nameof(ResetCooldown), delayBetweenDrops);
+            MoveNextCatToDropPaw();
+            CreateNextCat();
         }
+    }
+
+    private void SetDropPawPose()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0;
+        mousePosition.y = this.transform.position.y;
+        mousePosition.x = Math.Clamp(mousePosition.x, -dropAreaWidth, dropAreaWidth);
+        // if (mousePosition.x < -dropAreaWidth)
+        // {
+        //     mousePosition.x = -dropAreaWidth;
+        // }
+        // else if (mousePosition.x > dropAreaWidth)
+        // {
+        //     mousePosition.x = dropAreaWidth;
+        // }
+
+        dropPawPose.position = mousePosition;
     }
 
 
@@ -108,10 +156,22 @@ public class CatManager : MonoBehaviour
         // Try clause to ensure that the merge requests are cleared even if an exception is thrown
         try
         {
+            List<int> doneCatsIDs = new List<int>();
             _mergeRequests.DistinctBy(request => request.ID).ToList().ForEach(request =>
             {
-                MergeCats(request.Cat1, request.Cat2);
+                // prevent the same cat from being merged twice which would cause an exception
+                if (!doneCatsIDs.Contains(request.Cat1.GetInstanceID()) &&
+                    !doneCatsIDs.Contains(request.Cat2.GetInstanceID()))
+                {
+                    MergeCats(request.Cat1, request.Cat2);
+                    doneCatsIDs.Add(request.Cat1.GetInstanceID());
+                    doneCatsIDs.Add(request.Cat2.GetInstanceID());
+                }
             });
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
         }
         finally
         {
@@ -119,7 +179,7 @@ public class CatManager : MonoBehaviour
         }
     }
 
-    public void QueueMergeCats(Cat cat1, Cat cat2)
+    public void QueueMergeRequest(Cat cat1, Cat cat2)
     {
         // add the two cats to the merge request queue as a tuple that is sorted by their instance id
         int id1 = cat1.GetInstanceID();
@@ -167,6 +227,15 @@ public class CatManager : MonoBehaviour
         }
 
         Debug.Log("HighScore: " + HighScore);
+    }
+
+    public void GameOver()
+    {
+        // Game over logic
+        Debug.Log("Game Over");
+        highScoreText.text = "Game Over";
+        Time.timeScale = 0;
+        _onCooldown = true;
     }
 
 

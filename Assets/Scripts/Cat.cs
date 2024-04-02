@@ -16,7 +16,7 @@ public class Cat : MonoBehaviour
             if (cat.CatType == catType)
             {
                // Debug.Log("Cat " + catType + " collided with Cat " + cat.CatType);
-                CatManager.Instance.QueueMergeCats(this, cat);
+                CatManager.Instance.QueueMergeRequest(this, cat);
             }
             else
             {
