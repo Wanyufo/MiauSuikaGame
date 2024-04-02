@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3249143515211099896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8686899953984886457}
+  - component: {fileID: 3681232947390540136}
+  m_Layer: 0
+  m_Name: CatModddr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &8686899953984886457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3249143515211099896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.0691442, y: -46.29, z: -0.035382405}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3681232947390540136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3249143515211099896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac8b0e41f4c05a43b9ee2ddfc101e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateScales: 0
+  catPrefabs:
+  - {fileID: 4926739215488381113, guid: 9941699057734814286d9760060959f8, type: 3}
+  - {fileID: 4926739215488381113, guid: 68dbf7336cccc1049bb91997eb42abfd, type: 3}
+  - {fileID: 4926739215488381113, guid: f400c88b37d703b46a41ec4b3fbafc4b, type: 3}
+  - {fileID: 4926739215488381113, guid: a732a32555d1ea54bba233dd05c79120, type: 3}
+  - {fileID: 4926739215488381113, guid: e43b5cfaa82743649bc9fe633feb6ac2, type: 3}
+  - {fileID: 4926739215488381113, guid: ab5ed19d1beec8f4d8bfb05c76776b72, type: 3}
+  - {fileID: 4926739215488381113, guid: 6c2953f1363468b489a34ddd390e4923, type: 3}
+  - {fileID: 4926739215488381113, guid: 8b93aa366bbe42f4eb2ca6c6b6bc969b, type: 3}
+  - {fileID: 4926739215488381113, guid: 371df48a5f81dcb49a9146d16f25cd1c, type: 3}
+  - {fileID: 4926739215488381113, guid: 2fd392605bc71c243a3d028b864e0d4d, type: 3}
+  scaleOfSmallestCat: 1
+  scaleFactor: 1.25
+  additiveScale: 0
