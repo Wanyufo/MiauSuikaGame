@@ -56,12 +56,14 @@ public class UIManager : MonoBehaviour
         CatManager.Instance.GameOverEvent += GameOver;
 
         doneButton.gameObject.SetActive(false);
+        settingsMouseButton.gameObject.SetActive(false);
     }
 
     private void StartGame()
     {
         _animationManager.SwitchToPlayState(() => CatManager.Instance.StartGame());
         ChangeMainMenuButtons(false);
+        settingsMouseButton.interactable = true;
     }
 
     private void QuitGame()
@@ -92,6 +94,7 @@ public class UIManager : MonoBehaviour
         _animationManager.SwitchFromDoneToMenu();
         doneButton.gameObject.SetActive(false);
         ChangeMainMenuButtons(true);
+        settingsMouseButton.interactable = false;
         CatManager.Instance.CleanUpGame();
     }
 
@@ -99,12 +102,14 @@ public class UIManager : MonoBehaviour
     {
         CatManager.Instance.ResetTimescale();
         _animationManager.SwitchFromPlayToMenu();
+        settingsMouseButton.interactable = false;
         ChangeMainMenuButtons(true);
         CatManager.Instance.CleanUpGame();
     }
 
     private void ChangeMainMenuButtons(bool newState)
     {
+        settingsMouseButton.gameObject.SetActive(!newState);
         startButton.gameObject.SetActive(newState);
         quitButton.gameObject.SetActive(newState);
     }

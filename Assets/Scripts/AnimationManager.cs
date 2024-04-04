@@ -114,7 +114,6 @@ public class AnimationManager : MonoBehaviour
     {
         dropPaw.AnimationState.SetAnimation(0, DropPawLeave, false);
         nextPaw.AnimationState.SetAnimation(0, NextPawLeave, false);
-        // TODO make cats leave with paws or just disappear
     }
 
 
@@ -131,60 +130,64 @@ public class AnimationManager : MonoBehaviour
     // methods for turning jar to hover of buttons on and off
     public void JarButtonStartHoveredStart()
     {
-        SetJarAnimation(JarButtonStartOn, 0, false);
+        SetJarAnimation(JarButtonStartOn, loop: false);
     }
 
     public void JarButtonStartHoveredStop()
     {
-        SetJarAnimation(JarButtonStartOff, 0, false);
+        SetJarAnimation(JarButtonStartOff, loop: false, onComplete: () => { SetJarAnimation(JarMenu, loop: true); });
     }
 
     public void JarButtonOptionsHoveredStart()
     {
-        SetJarAnimation(JarButtonOptionOn, 0, false);
+        SetJarAnimation(JarButtonOptionOn, loop: false);
     }
 
     public void JarButtonOptionsHoveredStop()
     {
-        SetJarAnimation(JarButtonOptionOff, 0, false);
+        SetJarAnimation(JarButtonOptionOff, loop: false, onComplete: () => { SetJarAnimation(JarMenu, loop: true); });
     }
 
     public void JarButtonQuitHoveredStart()
     {
-        SetJarAnimation(JarButtonQuitOn, 0, false);
+        SetJarAnimation(JarButtonQuitOn, loop: false);
     }
 
     public void JarButtonQuitHoveredStop()
     {
-        SetJarAnimation(JarButtonQuitOff, 0, false);
+        SetJarAnimation(JarButtonQuitOff, loop: false, onComplete: () => { SetJarAnimation(JarMenu, loop: true); });
     }
 
     private void SetJarFromMenuToStart()
     {
-        SetJarAnimation(JarMenuToStart, 0, false);
+        SetJarAnimation(JarMenuToStart, loop: false);
     }
 
     private void SetJarFromStartToMenu()
     {
-        SetJarAnimation(JarGameToMenu, 0, false);
+        SetJarAnimation(JarGameToMenu, loop: false, onComplete: () => { SetJarAnimation(JarMenu, loop: true); });
     }
 
     // jar done animation
     private void SetJarDone()
     {
-        SetJarAnimation(JarDone, 0, false);
+        SetJarAnimation(JarDone, loop: false);
     }
 
     // done to menu animation
     private void SetJarDoneToMenu()
     {
-        SetJarAnimation(JarDoneToMenu, 0, false);
+        SetJarAnimation(JarDoneToMenu, loop: false, onComplete: () => { SetJarAnimation(JarMenu, loop: true); });
     }
 
 
-    private void SetJarAnimation(string animationName, int trackIndex = 0, bool loop = false)
+    private void SetJarAnimation(string animationName, int trackIndex = 0, bool loop = false, Action onComplete = null)
     {
         jarBackground.AnimationState.SetAnimation(trackIndex, animationName, loop);
-        jarFront.AnimationState.SetAnimation(trackIndex, animationName, loop);
+        TrackEntry entry = jarFront.AnimationState.SetAnimation(trackIndex, animationName, loop);
+        if (onComplete != null)
+        {
+            entry.Complete += (_) => { onComplete(); };
+        }
     }
 }

@@ -165,6 +165,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7970307596190294602, guid: 086af943468e47a4f831c2fb377e3c46, type: 3}
+      propertyPath: angrySprite
+      value: 
+      objectReference: {fileID: -1184254641, guid: 18bf2f72ec1e00f49b9da6cf0ebfe3bd, type: 3}
+    - target: {fileID: 7970307596190294602, guid: 086af943468e47a4f831c2fb377e3c46, type: 3}
+      propertyPath: otherSprite
+      value: 
+      objectReference: {fileID: -1184254641, guid: 6243e25b6fb4b5648b777ba7abaadbce, type: 3}
+    - target: {fileID: 7970307596190294602, guid: 086af943468e47a4f831c2fb377e3c46, type: 3}
       propertyPath: defaultSprite
       value: 
       objectReference: {fileID: -1184254641, guid: 5a8b4e28e1f8612478310ae0de0f0f52, type: 3}

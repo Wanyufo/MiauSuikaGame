@@ -174,6 +174,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   catType: 0
   defaultSprite: {fileID: 0}
-  eyesClosedSprite: {fileID: 0}
-  eyesOpenMaxDuration: 5
-  eyesClosedDuration: 0.7
+  angrySprite: {fileID: 0}
+  otherSprite: {fileID: 0}
+  eyesOpenMaxDuration: 15
+  eyesClosedDuration: 3
+  angryDuration: 1
+  relativeVelocityToAngry: 7

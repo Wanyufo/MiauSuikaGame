@@ -3,16 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Cat : MonoBehaviour
 {
     [SerializeField] private CatType catType;
     [SerializeField] private Sprite defaultSprite;
-    [SerializeField] private Sprite eyesClosedSprite;
+    [SerializeField] private Sprite angrySprite;
+    [SerializeField] private Sprite otherSprite;
     [SerializeField] private float eyesOpenMaxDuration = 0.5f;
     [SerializeField] private float eyesClosedDuration = 0.5f;
-    [SerializeField] private float invincibilityDuration = 0.1f;
+
+    [SerializeField] private float angryDuration = 1f;
+
+    [SerializeField] private float relativeVelocityToAngry = 10f;
 
     private SpriteRenderer _spriteRenderer;
     private bool _blinkingInProgress = false;
@@ -39,6 +44,13 @@ public class Cat : MonoBehaviour
                 //  Debug.Log("Cat " + catType + " collided with Cat " + cat.CatType + ". They are not the same type.");
             }
         }
+
+        if (collision.relativeVelocity.magnitude > relativeVelocityToAngry)
+        {
+            // Debug.Log("Cat " + catType + " collided with " + collision.relativeVelocity.magnitude + " force");
+
+            LookAngry();
+        }
     }
 
     private void Update()
@@ -46,20 +58,33 @@ public class Cat : MonoBehaviour
         if (!_blinkingInProgress)
         {
             float rand = Random.Range(eyesOpenMaxDuration / 3f, eyesOpenMaxDuration);
-            Invoke(nameof(BlinkClose), rand);
+            ExclusiveInvoke(nameof(LookOther), rand);
             _blinkingInProgress = true;
         }
     }
 
-    private void BlinkClose()
+    private void LookAngry()
     {
-        _spriteRenderer.sprite = eyesClosedSprite;
-        Invoke(nameof(BlinkOpen), eyesClosedDuration);
+        _blinkingInProgress = true;
+        _spriteRenderer.sprite = angrySprite;
+        ExclusiveInvoke(nameof(LookNormal), angryDuration);
     }
 
-    private void BlinkOpen()
+    private void LookOther()
+    {
+        _spriteRenderer.sprite = otherSprite;
+        ExclusiveInvoke(nameof(LookNormal), eyesClosedDuration);
+    }
+
+    private void LookNormal()
     {
         _spriteRenderer.sprite = defaultSprite;
         _blinkingInProgress = false;
+    }
+
+    private void ExclusiveInvoke(string methodName, float time)
+    {
+        CancelInvoke();
+        Invoke(methodName, time);
     }
 }

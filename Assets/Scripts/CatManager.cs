@@ -192,9 +192,9 @@ public class CatManager : MonoBehaviour
         Destroy(cat1.gameObject);
         Destroy(cat2.gameObject);
         GameObject nextCat = GetNextCatAndAddScore(cat1.CatType);
-        Instantiate(nextCat, newPos, Quaternion.identity);
-        // Instantiate(mergeParticleEffect, newPos, Quaternion.identity);
-        
+        GameObject newCat = Instantiate(nextCat, newPos, Quaternion.identity);
+        GameObject go = Instantiate(mergeParticleEffect, newPos, mergeParticleEffect.transform.rotation);
+        // go.transform.localScale *= newCat.transform.lossyScale.x;
     }
 
     private struct MergeRequest
