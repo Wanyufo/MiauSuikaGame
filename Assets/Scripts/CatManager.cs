@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CatManager : MonoBehaviour
 {
@@ -17,10 +19,28 @@ public class CatManager : MonoBehaviour
 
     [SerializeField] private float delayBetweenDrops = 0.5f;
 
-    [SerializeField] private Transform nextCatPose;
+    [FormerlySerializedAs("nextCatPose")] [SerializeField]
+    private Transform nextPawPose;
+
     [SerializeField] private Transform dropPawPose;
+    [SerializeField] private Transform dropPointPose;
 
     [SerializeField] private float dropAreaWidth;
+
+    [SerializeField] public AnimationManager animationManager;
+
+    [SerializeField] private GameObject mergeParticleEffect;
+
+    // game over unity event
+    public event EventHandler GameOverEvent;
+
+    protected virtual void OnGameOver(EventArgs e)
+    {
+        GameOverEvent?.Invoke(this, e);
+    }
+
+    private bool _playing = false;
+
 
     private Cat _thisCat;
     private Cat _nextCat;
@@ -36,8 +56,13 @@ public class CatManager : MonoBehaviour
         set
         {
             _highScore = value;
-            highScoreText.text = _highScore.ToString();
+            highScoreText.text = "Score:\n" + _highScore.ToString();
         }
+    }
+
+    public void ShowHighScore()
+    {
+        highScoreText.gameObject.SetActive(true);
     }
 
     private readonly List<MergeRequest> _mergeRequests = new List<MergeRequest>();
@@ -54,10 +79,29 @@ public class CatManager : MonoBehaviour
             throw new Exception("The highScoreText is not set. Please set it in the inspector.");
         }
 
-        CreateNextCat(0);
-        MoveNextCatToDropPaw();
-        CreateNextCat(1);
+        if (animationManager == null)
+        {
+            throw new Exception("The animationManager is not set. Please set it in the inspector.");
+        }
+
+        highScoreText.gameObject.SetActive(false);
     }
+
+    public void StartGame()
+    {
+        Time.timeScale = 1;
+        HighScore = 0;
+        CreateNextCat(0);
+        MoveNextCatToDropPoint();
+        CreateNextCat(1);
+        _playing = true;
+    }
+
+    public void ResetTimescale()
+    {
+        Time.timeScale = 1;
+    }
+
 
     private bool _onCooldown = false;
 
@@ -68,22 +112,28 @@ public class CatManager : MonoBehaviour
 
     private void Update()
     {
-        SetDropPawPose();
-        DropCat();
+        if (_playing)
+        {
+            SetDropPose();
+            DropCat();
+        }
     }
 
     private void CreateNextCat(int index = -1)
     {
         GameObject cat = index == -1 ? GetRandomDropCat() : cats[index].gameObject;
-        _nextCat = Instantiate(cat, nextCatPose).GetComponent<Cat>();
+        _nextCat = Instantiate(cat).GetComponent<Cat>();
+        _nextCat.transform.position = nextPawPose.position;
+        _nextCat.transform.rotation = nextPawPose.rotation;
+        _nextCat.transform.localScale *= this.transform.lossyScale.x;
         Rigidbody2D rigi = _nextCat.GetComponent<Rigidbody2D>();
         rigi.simulated = false;
     }
 
-    private void MoveNextCatToDropPaw()
+    private void MoveNextCatToDropPoint()
     {
-        _nextCat.transform.position = dropPawPose.position;
-        _nextCat.transform.SetParent(dropPawPose);
+        _nextCat.transform.position = dropPointPose.position;
+        _nextCat.transform.rotation = dropPointPose.rotation;
         _thisCat = _nextCat;
         _nextCat = null;
     }
@@ -99,7 +149,6 @@ public class CatManager : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0))
         {
             // if space is pressed, instantiate a cat at the mouse position
-            _thisCat.transform.SetParent(this.transform, true);
             Rigidbody2D rigi = _thisCat.GetComponent<Rigidbody2D>();
             rigi.simulated = true;
             rigi.AddForce(Vector2.down * (startingDownForce * rigi.mass), ForceMode2D.Impulse);
@@ -108,28 +157,25 @@ public class CatManager : MonoBehaviour
             int index = cats.FindIndex(cat => cat.CatType == _thisCat.CatType);
             AddPointsToHighScoreByIndex(index);
             Invoke(nameof(ResetCooldown), delayBetweenDrops);
-            MoveNextCatToDropPaw();
+            MoveNextCatToDropPoint();
             CreateNextCat();
         }
     }
 
 
-    private void SetDropPawPose()
+    private void SetDropPose()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
-        mousePosition.y = this.transform.position.y;
-        mousePosition.x = Math.Clamp(mousePosition.x, -dropAreaWidth, dropAreaWidth);
-        // if (mousePosition.x < -dropAreaWidth)
-        // {
-        //     mousePosition.x = -dropAreaWidth;
-        // }
-        // else if (mousePosition.x > dropAreaWidth)
-        // {
-        //     mousePosition.x = dropAreaWidth;
-        // }
+        float mouseX = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
+        mouseX = Math.Clamp(mouseX, -dropAreaWidth, dropAreaWidth);
 
-        dropPawPose.position = mousePosition;
+
+        var dropPawPosition = dropPawPose.position;
+        dropPawPosition = new Vector3(mouseX, dropPawPosition.y, dropPawPosition.z);
+        dropPawPose.position = dropPawPosition;
+        var dropPointPosition = dropPointPose.position;
+        dropPointPosition = new Vector3(mouseX, dropPointPosition.y, dropPointPosition.z);
+        dropPointPose.position = dropPointPosition;
+        _thisCat.transform.position = dropPointPosition;
     }
 
 
@@ -147,6 +193,8 @@ public class CatManager : MonoBehaviour
         Destroy(cat2.gameObject);
         GameObject nextCat = GetNextCatAndAddScore(cat1.CatType);
         Instantiate(nextCat, newPos, Quaternion.identity);
+        // Instantiate(mergeParticleEffect, newPos, Quaternion.identity);
+        
     }
 
     private struct MergeRequest
@@ -158,6 +206,8 @@ public class CatManager : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!_playing) return;
+
         // Try clause to ensure that the merge requests are cleared even if an exception is thrown
         try
         {
@@ -203,7 +253,7 @@ public class CatManager : MonoBehaviour
     private GameObject GetNextCatAndAddScore(CatType catType)
     {
         int index = cats.FindIndex(cat => cat.CatType == catType);
-        Debug.Log("index = " + index);
+        // Debug.Log("index = " + index);
         if (index < 0)
         {
             throw new Exception("The catType" + catType + " is not in the list of cats.");
@@ -231,16 +281,38 @@ public class CatManager : MonoBehaviour
             HighScore = 99999;
         }
 
-        Debug.Log("HighScore: " + HighScore);
+        // Debug.Log("HighScore: " + HighScore);
     }
 
     public void GameOver()
     {
         // Game over logic
-        Debug.Log("Game Over");
-        highScoreText.text = "Game Over";
+        if (_playing)
+        {
+            _playing = false;
+
+            highScoreText.text = "Game Over\nHighscore:\n" + _highScore.ToString();
+            Debug.Log("Game Over");
+            Destroy(_thisCat.gameObject);
+            Destroy(_nextCat.gameObject);
+            OnGameOver(EventArgs.Empty);
+            Time.timeScale = 0;
+        }
+    }
+
+    public void CleanUpGame()
+    {
+        _playing = false;
         Time.timeScale = 0;
-        _onCooldown = true;
+        highScoreText.text = "Last Highscore:\n" + _highScore.ToString();
+        HighScore = 0;
+        foreach (GameObject cat in GameObject.FindGameObjectsWithTag("Cat"))
+        {
+            Destroy(cat);
+        }
+
+        _thisCat = null;
+        _nextCat = null;
     }
 
 

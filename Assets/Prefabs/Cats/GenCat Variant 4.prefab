@@ -152,6 +152,14 @@ PrefabInstance:
       propertyPath: catType
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7970307596190294602, guid: 086af943468e47a4f831c2fb377e3c46, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa92cef5876e6d24380a10211697c888, type: 3}
+    - target: {fileID: 7970307596190294602, guid: 086af943468e47a4f831c2fb377e3c46, type: 3}
+      propertyPath: eyesClosedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa92cef5876e6d24380a10211697c888, type: 3}
     - target: {fileID: 8186547672944265540, guid: 086af943468e47a4f831c2fb377e3c46, type: 3}
       propertyPath: m_Mass
       value: 9.609677

@@ -1,0 +1,11 @@
+MiauSuika_right_paw.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+paw_side
+bounds:2,404,803,534
+paw_side_inside
+bounds:493,74,328,229
+rotate:90
+paw_side_next
+bounds:2,2,489,400

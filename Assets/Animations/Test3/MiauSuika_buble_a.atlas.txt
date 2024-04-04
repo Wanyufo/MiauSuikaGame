@@ -1,0 +1,6 @@
+MiauSuika_buble_a.png
+size:2048,2048
+filter:Linear,Linear
+pma:true
+speack_buble
+bounds:2,2,1412,1053

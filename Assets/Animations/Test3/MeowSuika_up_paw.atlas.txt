@@ -1,0 +1,8 @@
+MeowSuika_up_paw.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+up_paw
+bounds:2,221,556,540
+up_paw_inside
+bounds:2,2,327,217

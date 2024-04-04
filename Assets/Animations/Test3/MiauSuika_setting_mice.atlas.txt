@@ -1,0 +1,8 @@
+MiauSuika_setting_mice.png
+size:512,512
+filter:Linear,Linear
+pma:true
+icon_mouse
+bounds:2,183,391,311
+icon_mouse_tail
+bounds:2,2,309,179

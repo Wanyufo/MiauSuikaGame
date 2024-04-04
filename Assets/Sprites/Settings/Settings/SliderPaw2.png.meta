@@ -43,17 +43,17 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.4491369, y: 0.45889854}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteBorder: {x: 1629, y: 911, z: 2018, w: 1076}
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
-  spriteTessellationDetail: -1
+  spriteTessellationDetail: 0.44
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
@@ -108,18 +108,73 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
-    outline: []
+    sprites:
+    - serializedVersion: 2
+      name: SliderPaw2_0
+      rect:
+        serializedVersion: 2
+        x: 1638
+        y: 916
+        width: 178
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cab0d27d4d1806f489b4c78ababf6f42
+      internalID: -1480665285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline:
+    - - {x: -119.99999, y: -110.62499}
+      - {x: -106.87499, y: -99.37499}
+      - {x: -101.24999, y: -86.24999}
+      - {x: -101.24999, y: -73.125}
+      - {x: -106.87499, y: -59.999996}
+      - {x: -127.49999, y: -41.249996}
+      - {x: -135, y: -37.499996}
+      - {x: -136.875, y: -24.374998}
+      - {x: -144.375, y: -11.249999}
+      - {x: -163.12498, y: -1.8749999}
+      - {x: -166.87498, y: -1.8749999}
+      - {x: -178.12498, y: -3.7499998}
+      - {x: -194.99998, y: -7.4999995}
+      - {x: -204.37498, y: -1.8749999}
+      - {x: -221.24998, y: -1.8749999}
+      - {x: -234.37498, y: -7.4999995}
+      - {x: -247.49998, y: -18.749998}
+      - {x: -251.24998, y: -29.999998}
+      - {x: -256.875, y: -39.374996}
+      - {x: -271.875, y: -48.749996}
+      - {x: -285, y: -65.625}
+      - {x: -285, y: -88.12499}
+      - {x: -281.25, y: -95.62499}
+      - {x: -264.375, y: -108.74999}
+      - {x: -268.125, y: -116.24999}
+      - {x: -270, y: -133.125}
+      - {x: -256.875, y: -149.99998}
+      - {x: -232.49998, y: -161.24998}
+      - {x: -191.24998, y: -166.87498}
+      - {x: -179.99998, y: -166.87498}
+      - {x: -146.25, y: -161.24998}
+      - {x: -121.87499, y: -144.375}
+      - {x: -116.24999, y: -129.375}
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SliderPaw2_0: -1480665285
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
