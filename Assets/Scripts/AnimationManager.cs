@@ -54,6 +54,30 @@ public class AnimationManager : MonoBehaviour
     private const string BubbleThinkIdle = "idle";
 
 
+    private List<string> _jarFolderNames = new List<string>()
+    {
+        "slot_0",
+        "slot_1",
+        "slot_2",
+        "slot_3",
+        "slot_4",
+    };
+
+    private List<string> _jarSkinNames = new List<string>()
+    {
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+    };
+
+
     public void InitializeAnimationsToMainMenuState()
     {
         settingsMouse.AnimationState.SetEmptyAnimation(0, 0);
@@ -178,6 +202,43 @@ public class AnimationManager : MonoBehaviour
     private void SetJarDoneToMenu()
     {
         SetJarAnimation(JarDoneToMenu, loop: false, onComplete: () => { SetJarAnimation(JarMenu, loop: true); });
+    }
+
+    // for testing ScoreLabel
+    // private void Start()
+    // {
+    //     SetScoreToLabel(12345);
+    // }
+
+    public void SetScoreToLabel(int score)
+    {
+        int[] scoreDigits =
+        {
+            0, 0, 0, 0, 0
+        };
+        for (int i = scoreDigits.Length - 1; i >= 0; i--)
+        {
+            scoreDigits[i] = score % 10;
+            score /= 10;
+        }
+
+        // use skins of Jar for score
+        SkeletonAnimation skeletonAnimation = jarFront;
+        Skeleton skeleton = skeletonAnimation.skeleton;
+        SkeletonData skeletonData = skeleton.Data;
+        Skin mixSkin = new Skin("MixSkin");
+
+        for (int digitIndex = 0; digitIndex < scoreDigits.Length; digitIndex++)
+        {
+            int digit = scoreDigits[digitIndex];
+            string folderName = _jarFolderNames[digitIndex];
+            string skinName = _jarSkinNames[digit];
+            Debug.Log(" Digit: " + digit + " in Slot: " + folderName + " Attachment Name: " + skinName);
+            string skinNameFull = folderName + "/" + skinName;
+            mixSkin.AddSkin(skeletonData.FindSkin(skinNameFull));
+        }
+
+        skeleton.SetSkin(mixSkin);
     }
 
 

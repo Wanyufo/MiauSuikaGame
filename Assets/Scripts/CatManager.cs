@@ -293,6 +293,7 @@ public class CatManager : MonoBehaviour
 
             highScoreText.text = "Game Over\nHighscore:\n" + _highScore.ToString();
             Debug.Log("Game Over");
+            animationManager.SetScoreToLabel(_highScore);
             Destroy(_thisCat.gameObject);
             Destroy(_nextCat.gameObject);
             OnGameOver(EventArgs.Empty);
