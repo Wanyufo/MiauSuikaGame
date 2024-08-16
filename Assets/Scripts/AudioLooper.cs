@@ -41,10 +41,10 @@ public class AudioLooper : MonoBehaviour
                 _audioSourceA.Play();
 
                 // Crossfade from audioSourceB to audioSourceA
-                float startTime = Time.time;
-                while (Time.time < startTime + clip.length - crossFadeTime)
+                float startTime = Time.unscaledTime;
+                while (Time.unscaledTime < startTime + clip.length - crossFadeTime)
                 {
-                    float t = (Time.time - startTime) / crossFadeTime;
+                    float t = (Time.unscaledTime - startTime) / crossFadeTime;
                     _audioSourceA.volume = Mathf.Lerp(0f, volume, t);
                     _audioSourceB.volume = Mathf.Lerp(volume, 0f, t);
                     yield return null;
