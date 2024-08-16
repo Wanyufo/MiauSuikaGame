@@ -146,7 +146,7 @@ public class CatManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKeyUp(KeyCode.Mouse0) || Input.GetKey(KeyCode.Space))
         {
             // if space is pressed, instantiate a cat at the mouse position
             Rigidbody2D rigi = _thisCat.GetComponent<Rigidbody2D>();
