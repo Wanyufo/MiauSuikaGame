@@ -9,7 +9,15 @@ public class GameOverCollider : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out Cat cat))
         {
-            CatManager.Instance.GameOver();
+            if (cat.falling)
+            {
+                CatManager.Instance.GameOver();
+            }
+            else
+            {
+                Destroy(cat.gameObject);
+               // TODO Add small congrats message for finding the bug
+            }
         }
     }
 }

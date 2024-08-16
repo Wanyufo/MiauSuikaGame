@@ -22,6 +22,8 @@ public class Cat : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private bool _blinkingInProgress = false;
 
+    public bool falling = false;
+
     private void Start()
     {
         _spriteRenderer = GetComponentsInChildren<SpriteRenderer>().First();
