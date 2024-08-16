@@ -9,7 +9,7 @@ public class GameOverCollider : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out Cat cat))
         {
-            if (cat.falling)
+            if (cat.fallingOutOfGlass)
             {
                 CatManager.Instance.GameOver();
             }

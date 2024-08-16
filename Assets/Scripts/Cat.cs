@@ -22,7 +22,7 @@ public class Cat : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private bool _blinkingInProgress = false;
 
-    public bool falling = false;
+    public bool fallingOutOfGlass = false;
 
     private void Start()
     {

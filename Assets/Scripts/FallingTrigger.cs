@@ -33,7 +33,7 @@ public class FallingTrigger : MonoBehaviour
         Debug.Log("FallingTrigger: OnTriggerEnter2D");
         if (other.attachedRigidbody.gameObject.TryGetComponent(out Cat cat))
         {
-            cat.falling = true;
+            cat.fallingOutOfGlass = true;
         }
     }
 }
