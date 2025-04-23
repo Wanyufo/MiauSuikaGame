@@ -13,7 +13,7 @@ https://github.com/github/gitignore/blob/main/Unity.gitignore
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-
+/.idea/
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
